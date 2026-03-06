@@ -44,6 +44,7 @@ class Program
 
             else if (choice == "4")
             {
+                Console.WriteLine("Goodbye!");
                 break;
             }
 

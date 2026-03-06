@@ -9,6 +9,10 @@ namespace classes_demo
         private List<string> _questions = new List<string>();
         private Random _random = new Random();
 
+        private List<string> _unusedPrompts = new List<string>();
+        
+        private List<string> _unusedQuestions = new List<string>();
+
         public Reflection() : base ("Reflection",
         "This activity will help you reflect on times in your life when you have shown strength and resilience.")
         {
@@ -28,20 +32,42 @@ namespace classes_demo
 
         private string GetRandomPrompt()
         {
-            int index = _random.Next(_prompts.Count);
-            return _prompts[index];
+            if (_unusedPrompts.Count == 0)
+            {
+                _unusedPrompts = new List<string>(_prompts);
+            }
+
+            int index = _random.Next(_unusedPrompts.Count);
+            string prompt = _unusedPrompts[index];
+
+            _unusedPrompts.RemoveAt(index);
+
+            return prompt;
         }
 
         private string GetRandomQuestion()
         {
-            int index = _random.Next(_questions.Count);
-            return _questions[index];
+            if (_unusedQuestions.Count == 0)
+            {
+                _unusedQuestions = new List<string>(_questions);
+            }
+
+            int index = _random.Next(_unusedQuestions.Count);
+            string question = _unusedQuestions[index];
+
+            _unusedQuestions.RemoveAt(index);
+
+            return question;
         }
 
         public void Run()
         {
+
             WelcomeMessage();
             Console.WriteLine();
+
+            _unusedPrompts = new List<string>(_prompts);
+            _unusedQuestions = new List<string>(_questions);
 
             Console.WriteLine("Consider the following prompt:");
             Console.WriteLine($"--- {GetRandomPrompt()} ---");
@@ -58,6 +84,7 @@ namespace classes_demo
             while (DateTime.Now < endTime)
             {
                 Console.WriteLine(GetRandomQuestion());
+                Countdown(5);
                 Spinner();
             }
 

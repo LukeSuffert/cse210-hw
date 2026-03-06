@@ -9,6 +9,8 @@ namespace classes_demo
         private List<string> _items = new List<string>();
         private Random _random = new Random();
 
+        private List<string> _unusedPrompts = new List<string>();
+
         public Listing() : base("Listing",
         "This activity will help you reflect on the good things in your life by having you list as many things as you can in a certain area.")
         {
@@ -21,16 +23,25 @@ namespace classes_demo
 
         private string GetRandomPrompt()
         {
-            int index = _random.Next(_prompts.Count);
-            return _prompts[index];
+            if (_unusedPrompts.Count == 0)
+            {
+                _unusedPrompts = new List<string>(_prompts);
+            }
+
+            int index = _random.Next(_unusedPrompts.Count);
+            string prompt = _unusedPrompts[index];
+
+            _unusedPrompts.RemoveAt(index);
+
+            return prompt;
         }
 
         public void Run()
         {
 
-            _items.Clear();
-
             WelcomeMessage();
+
+            _unusedPrompts = new List<string>(_prompts);
 
             Console.WriteLine("List as many responses as you can to the following prompt:");
             Console.WriteLine($"--- {GetRandomPrompt()} ---");
