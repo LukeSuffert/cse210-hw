@@ -2,6 +2,7 @@ using System;
 
 class Program
 {
+    static int _totalPoints;
     static void Main()
     {
         ShowMenu();
@@ -11,7 +12,7 @@ class Program
     {
         while (true)
         {
-            Console.WriteLine($"You have {_points} points.");
+            Console.WriteLine($"You have {_totalPoints} points.");
             Console.WriteLine();
 
             Console.WriteLine("Menu Options:");
