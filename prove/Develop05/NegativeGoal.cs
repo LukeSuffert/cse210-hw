@@ -2,16 +2,16 @@ using System;
 
 namespace classes_demo
 {
-    public class EternalGoal : Goal
+    public class NegativeGoal : Goal
     {
-        public EternalGoal(string goalname, string description, int points) : base(goalname, description, points)
+        public NegativeGoal(string goalname, string description, int points)
+            : base(goalname, description, points)
         {
-            
         }
 
         public override int RecordEvent()
         {
-            return _points;
+            return -_points;
         }
 
         public override bool IsComplete()
@@ -21,12 +21,12 @@ namespace classes_demo
 
         public override string GetDetailsString()
         {
-            return $"[ ] {_goalname} ({_description})";
+            return $"[!] {_goalname} ({_description})";
         }
 
         public override string GetStringRepresentation()
         {
-            return $"Eternal Goal | {_goalname} | {_description} | {_points}";
+            return $"NegativeGoal|{_goalname}|{_description}|{_points}";
         }
     }
 }
