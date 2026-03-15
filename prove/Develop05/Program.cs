@@ -78,7 +78,6 @@ class Program
                 Console.WriteLine("See you later!");
                 break;
             }
-
             else
             {
                 Console.WriteLine("Invalid choice! Please select a number between 1 and 4.");
