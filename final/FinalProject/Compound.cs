@@ -32,9 +32,12 @@ public class Compound : Substance
         }
         return formula.ToString();
     }
-
     public int GetElementCount(Element element)
     {
         return _composition.ContainsKey(element) ? _composition[element] : 0;
     }
+    public List<Element> GetElements()
+{
+    return new List<Element>(_composition.Keys);
+}
 }
