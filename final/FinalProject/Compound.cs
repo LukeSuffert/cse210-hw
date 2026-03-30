@@ -14,30 +14,56 @@ public class Compound : Substance
     private static double CalculateMolarMass(Dictionary<Element, int> composition)
     {
         double total = 0;
-        foreach (var pair in composition)
+
+        foreach (KeyValuePair<Element, int> pair in composition)
         {
-            total += pair.Key.GetMolarMass() * pair.Value;
+            Element element = pair.Key;
+            int count = pair.Value;
+
+            total = total + (element.GetMolarMass() * count);
         }
+
         return total;
     }
 
     public override string GetFormula()
     {
         StringBuilder formula = new StringBuilder();
-        foreach (var pair in _composition)
+
+        foreach (KeyValuePair<Element, int> pair in _composition)
         {
             formula.Append(pair.Key.GetFormula());
+
             if (pair.Value > 1)
+            {
                 formula.Append(pair.Value);
+            }
         }
+
         return formula.ToString();
     }
+
     public int GetElementCount(Element element)
     {
-        return _composition.ContainsKey(element) ? _composition[element] : 0;
+        if (_composition.ContainsKey(element))
+        {
+            return _composition[element];
+        }
+        else
+        {
+            return 0;
+        }
     }
+
     public List<Element> GetElements()
-{
-    return new List<Element>(_composition.Keys);
-}
+    {
+        List<Element> elements = new List<Element>();
+
+        foreach (KeyValuePair<Element, int> pair in _composition)
+        {
+            elements.Add(pair.Key);
+        }
+
+        return elements;
+    }
 }

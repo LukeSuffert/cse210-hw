@@ -4,7 +4,7 @@ public abstract class Reaction
 {
     protected List<Compound> _reactants;
     protected List<Compound> _products;
-    protected Dictionary<Compound, int> _coefficients; // for balancing later
+    protected Dictionary<Compound, int> _coefficients;
 
     public Reaction(List<Compound> reactants)
     {
@@ -23,20 +23,26 @@ public abstract class Reaction
         return _products;
     }
 
-    public abstract void CalculateProducts();
+    public Dictionary<Compound, int> GetCoefficients()
+    {
+        return _coefficients;
+    }
+
+    public abstract void CalculateProducts(); 
     public abstract string GetReactionType(); 
 
     public virtual void Balance()
     {
-        foreach (var r in _reactants)
-            _coefficients[r] = 1;
+        for (int i = 0; i < _reactants.Count; i++)
+        {
+            Compound reactant = _reactants[i];
+            _coefficients[reactant] = 1;
+        }
 
-        foreach (var p in _products)
-            _coefficients[p] = 1;
-    }
-
-    public Dictionary<Compound, int> GetCoefficients()
-    {
-        return _coefficients;
+        for (int i = 0; i < _products.Count; i++)
+        {
+            Compound product = _products[i];
+            _coefficients[product] = 1;
+        }
     }
 }
