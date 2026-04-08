@@ -8,7 +8,6 @@ public class PeriodicTable
     {
         _elements = new Dictionary<string, Element>();
 
-        // Add common elements (you only need ~10 for the project)
         AddElement(new Element("Hydrogen", "H", 1, 1.008));
         AddElement(new Element("Oxygen", "O", 8, 16.00));
         AddElement(new Element("Carbon", "C", 6, 12.01));
@@ -24,6 +23,30 @@ public class PeriodicTable
 
     public Element GetElement(string symbol)
     {
-        return _elements.ContainsKey(symbol) ? _elements[symbol] : null;
+        if (_elements.ContainsKey(symbol))
+        {
+            return _elements[symbol];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public bool ContainsElement(string symbol)
+    {
+        return _elements.ContainsKey(symbol);
+    }
+
+    public List<string> GetAvailableSymbols()
+    {
+        List<string> symbols = new List<string>();
+
+        foreach (KeyValuePair<string, Element> pair in _elements)
+        {
+            symbols.Add(pair.Key);
+        }
+
+        return symbols;
     }
 }

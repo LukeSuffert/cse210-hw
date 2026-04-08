@@ -13,24 +13,36 @@ public class ReactionFactory
     public Reaction CreateReaction(string input)
     {
         string[] parts = input.Split('+');
-
         List<Compound> reactants = new List<Compound>();
 
-        foreach (string part in parts)
+        for (int i = 0; i < parts.Length; i++)
         {
-            Compound compound = ParseCompound(part.Trim());
-            reactants.Add(compound);
+            string trimmedPart = parts[i].Trim();
+
+            if (trimmedPart != "")
+            {
+                Compound compound = ParseCompound(trimmedPart);
+                reactants.Add(compound);
+            }
         }
 
-        string type = DetectReactionType(reactants);
+        string reactionType = DetectReactionType(reactants);
 
-        if (type == "Synthesis")
+        if (reactionType == "Synthesis")
         {
             return new SynthesisReaction(reactants);
+        }
+        else if (reactionType == "Decomposition")
+        {
+            return new DecompositionReaction(reactants);
+        }
+        else if (reactionType == "Combustion")
+        {
+            return new CombustionReaction(reactants);
         }
         else
         {
-            return new SynthesisReaction(reactants);
+            throw new Exception("Unsupported reaction type.");
         }
     }
 
@@ -41,23 +53,76 @@ public class ReactionFactory
             return "Decomposition";
         }
 
-        foreach (Compound c in reactants)
+        if (reactants.Count == 2)
         {
-            if (c.GetFormula().Contains("O2"))
+            bool hasOxygenGas = false;
+            bool hasHydrocarbon = false;
+
+            for (int i = 0; i < reactants.Count; i++)
+            {
+                Compound reactant = reactants[i];
+                string formula = reactant.GetFormula();
+
+                if (formula == "O2")
+                {
+                    hasOxygenGas = true;
+                }
+
+                if (IsHydrocarbon(reactant))
+                {
+                    hasHydrocarbon = true;
+                }
+            }
+
+            if (hasOxygenGas && hasHydrocarbon)
             {
                 return "Combustion";
             }
+
+            return "Synthesis";
         }
 
-        return "Synthesis";
+        throw new Exception("This program currently supports only one or two reactants.");
     }
 
-            private Compound ParseCompound(string formula)
+    private bool IsHydrocarbon(Compound compound)
+    {
+        List<Element> elements = compound.GetElements();
+        bool hasCarbon = false;
+        bool hasHydrogen = false;
+
+        for (int i = 0; i < elements.Count; i++)
+        {
+            string symbol = elements[i].GetFormula();
+
+            if (symbol == "C")
+            {
+                hasCarbon = true;
+            }
+            else if (symbol == "H")
+            {
+                hasHydrogen = true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return hasCarbon && hasHydrogen;
+    }
+
+    private Compound ParseCompound(string formula)
     {
         Dictionary<Element, int> composition = new Dictionary<Element, int>();
 
         for (int i = 0; i < formula.Length; i++)
         {
+            if (!char.IsLetter(formula[i]))
+            {
+                continue;
+            }
+
             string symbol = formula[i].ToString();
 
             if (i + 1 < formula.Length && char.IsLower(formula[i + 1]))
@@ -67,11 +132,17 @@ public class ReactionFactory
             }
 
             int count = 1;
+            string numberText = "";
 
-            if (i + 1 < formula.Length && char.IsDigit(formula[i + 1]))
+            while (i + 1 < formula.Length && char.IsDigit(formula[i + 1]))
             {
-                count = int.Parse(formula[i + 1].ToString());
+                numberText = numberText + formula[i + 1].ToString();
                 i++;
+            }
+
+            if (numberText != "")
+            {
+                count = int.Parse(numberText);
             }
 
             Element element = _table.GetElement(symbol);
@@ -95,4 +166,3 @@ public class ReactionFactory
         return compound;
     }
 }
-    

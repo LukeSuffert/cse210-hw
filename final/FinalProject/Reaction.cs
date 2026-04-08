@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 
 public abstract class Reaction
 {
@@ -28,21 +29,52 @@ public abstract class Reaction
         return _coefficients;
     }
 
-    public abstract void CalculateProducts(); 
-    public abstract string GetReactionType(); 
+    public abstract void CalculateProducts();
+    public abstract string GetReactionType();
+    public abstract void Balance();
 
-    public virtual void Balance()
+    public string GetBalancedEquation()
     {
+        StringBuilder builder = new StringBuilder();
+
         for (int i = 0; i < _reactants.Count; i++)
         {
             Compound reactant = _reactants[i];
-            _coefficients[reactant] = 1;
+            int coefficient = _coefficients[reactant];
+
+            if (coefficient > 1)
+            {
+                builder.Append(coefficient);
+            }
+
+            builder.Append(reactant.GetFormula());
+
+            if (i < _reactants.Count - 1)
+            {
+                builder.Append(" + ");
+            }
         }
+
+        builder.Append(" -> ");
 
         for (int i = 0; i < _products.Count; i++)
         {
             Compound product = _products[i];
-            _coefficients[product] = 1;
+            int coefficient = _coefficients[product];
+
+            if (coefficient > 1)
+            {
+                builder.Append(coefficient);
+            }
+
+            builder.Append(product.GetFormula());
+
+            if (i < _products.Count - 1)
+            {
+                builder.Append(" + ");
+            }
         }
+
+        return builder.ToString();
     }
 }
