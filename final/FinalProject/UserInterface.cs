@@ -15,7 +15,7 @@ public class UserInterface
     public void Run()
     {
         Console.WriteLine("=== Chemical Reaction Simulator ===");
-        Console.WriteLine("Available elements: H, O, C, N, Na, Cl");
+        Console.WriteLine("Available elements: H, O, C, N, Na, Cl, F");
         Console.WriteLine("Enter a reaction (example: H2 + O2 or CH4 + O2):");
 
         string input = Console.ReadLine();

@@ -14,6 +14,7 @@ public class PeriodicTable
         AddElement(new Element("Nitrogen", "N", 7, 14.01));
         AddElement(new Element("Sodium", "Na", 11, 22.99));
         AddElement(new Element("Chlorine", "Cl", 17, 35.45));
+        AddElement(new Element("Fluorine", "F", 9, 19));
     }
 
     private void AddElement(Element element)
